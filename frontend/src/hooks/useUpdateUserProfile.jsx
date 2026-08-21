@@ -14,13 +14,29 @@ const useUpdateUserProfile = () => {
 					},
 					body: JSON.stringify(formData),
 				});
-				const data = await res.json();
+
+				const contentType = res.headers.get("content-type") || "";
+				let data = {};
+
+				if (contentType.includes("application/json")) {
+					data = await res.json();
+				} else {
+					const text = await res.text();
+					if (text) {
+						try {
+							data = JSON.parse(text);
+						} catch {
+							throw new Error("The backend is not responding with JSON. Please make sure the server is running.");
+						}
+					}
+				}
+
 				if (!res.ok) {
 					throw new Error(data.error || "Something went wrong");
 				}
 				return data;
 			} catch (error) {
-				throw new Error(error.message, { cause: error });
+				throw new Error(error.message || "Something went wrong", { cause: error });
 			}
 		},
 		onSuccess: () => {
