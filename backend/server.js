@@ -12,12 +12,12 @@ import connectMongoDB from "./database/connectMongoDb.js";
 dotenv.config();
 
 cloudinary.config({
-    cloud_name: process.env.Cloudinary_CLOUD_NAME,
-    api_key: process.env.Cloudinary_API_KEY,
-    api_secret: process.env.Cloudinary_API_SECRET,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-const app = express();
+const app = express({ limit:"1mb" });
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
